@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.js"></script>
+
+    <style type="text/css">
+      .my-modal {
+        border: 1px solid #ccc;
+        margin: 20px;
+        position: relative;
+      }
+
+      .my-modal .close-btn {
+        font-weight: 700;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+
+      .my-modal .close-btn:hover {
+        cursor: pointer;
+      }
+
+      .my-modal .header {
+        border-bottom: 1px solid #ccc;
+        font-weight: 700;
+        padding: 20px; 
+      }
+
+      .my-modal .body {
+        padding: 20px; 
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+
+      class Modal extends React.Component {
+        render() {
+          return (
+            <div className="my-modal">
+              <div onClick={this.props.onCloseModal} className="close-btn">
+                X
+              </div>
+              <div className="header">
+                {this.props.header}
+              </div>
+              <div className="body">
+                {this.props.body}
+              </div>
+            </div>
+          );
+        }
+      }
+
+      const withDefaultCloseBehavior = (WrappedComponent) => {
+        return class Component extends React.Component {
+          render() {
+            const newProps = {
+              onCloseModal: () => console.log("default close behavior")
+            };
+
+            return <WrappedComponent {...this.props} {...newProps} />
+          } 
+        }
+      }
+
+      const withConfirmCloseBehavior = (WrappedComponent) => {
+        return class Component extends React.Component {
+          render() {
+            const newProps = {
+              onCloseModal: () => console.log("confirm close behavior")
+            };
+
+            return <WrappedComponent {...this.props} {...newProps} />
+          } 
+        }
+      }
+
+      const DefaultCloseModal = withDefaultCloseBehavior(Modal);
+      const ConfirmCloseModal = withConfirmCloseBehavior(Modal);
+
+      class App extends React.Component {
+        render() {
+          return (
+            <div>
+              <DefaultCloseModal header="Modal 1" body="Some body" />
+              <ConfirmCloseModal header="Modal 2" body="Some body" />
+            </div>
+          );
+        }
+      }
+       
+      ReactDOM.render(
+        <App />,
+        document.getElementById('app')
+      );
+
+    </script>
+  </body>
+</html>

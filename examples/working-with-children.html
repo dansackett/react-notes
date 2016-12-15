@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.js"></script>
+
+    <style type="text/css">
+      .clickable-btns button {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+
+      // This stateless functional component takes in any number of children
+      // and adds an onClick handler to each making an alert with the button text
+      const BtnsWithClickHandler = (props) => (
+        <div className="clickable-btns">
+          {
+            React.Children.map(props.children, (child, i) => React.cloneElement(child, {
+              ...child.props,
+              onClick: (e) => alert(e.target.textContent)
+            }))
+          }
+        </div>
+      );
+
+      // This stateless functional component takes only a single child and
+      // disables the button
+      const BtnDisabled = (props) => {
+        const child = React.Children.only(props.children);
+
+        return (
+          <div>
+            {
+              React.cloneElement(child, {
+                ...child.props,
+                disabled: true
+              })
+            }
+          </div>
+        );
+      };
+
+      // Our App component is the main entrypoint
+      class App extends React.Component {
+        render() {
+          return (
+            <BtnsWithClickHandler>
+              <BtnDisabled>
+                <button>One</button>
+              </BtnDisabled>
+              <button>Two</button>
+              <button>Three</button>
+            </BtnsWithClickHandler>
+          );
+        }
+      }
+       
+      ReactDOM.render(
+        <App />,
+        document.getElementById('app')
+      );
+
+    </script>
+  </body>
+</html>
