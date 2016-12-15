@@ -116,7 +116,7 @@ button components. Then in the row's onClick method you can check if the event
 target is the same DOM node as the button ref. If it is, you do not complete
 the row's onClick event.
 
-## Working with Children
+## Working With Children
 
 Sometimes when working with child components we want to enhance them in a
 specific way dynamically. In these cases, we will almost always work with
