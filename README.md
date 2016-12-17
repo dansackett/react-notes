@@ -4,11 +4,73 @@ When working with React, it can be hard to find the **right** way to do things.
 Here I've tried to compile some things I want to remember when working with a
 React application.
 
+A lot of these examples are not my own. They are examples I have come across
+while reading articles online or through working with React.
+
 ## Table of Contents
 
-1. [Working with Refs](#working-with-refs)
-2. [Working With Children](#working-with-children)
-3. [Higher Order Components](#higher-order-components)
+1. [Component Lifecycle](#component-lifecycle)
+2. [Stateless Functional Components](#stateless-functional-components)
+3. [Working with Refs](#working-with-refs)
+4. [Working With Children](#working-with-children)
+5. [Higher Order Components](#higher-order-components)
+
+## Component Lifecycle
+
+The React component lifecycle allows us to act at different phases of a
+component being rendered to the DOM. The following table outlines the lifecycle
+structure and order of events:
+
+| Name                      | Params                | Called For        | Receives Context  | setState Triggers and Update  |
+|:-------------------------:|:---------------------:|:-----------------:|:-----------------:|:-----------------------------:|
+| componentWillMount        | -                     | Initial render()  | No                | No                            |
+| componentDidMount         | -                     | Initial render()  | No                | Yes                           |
+| componentWillReceiveProps | nextProps             | New props         | Yes               | Yes                           |
+| shouldComponentUpdate     | nextProps, nextState  | New props / state | Yes               | Yes                           |
+| componentWillUpdate       | nextProps, nextState  | New props / state | Yes               | -                             |
+| componentDidUpdate        | prevProps, prevState  | New props / state | No                | Yes                           |
+| componentWillUnmount      | -                     | unmounting        | No                | -                             |
+
+## Stateless Functional Components
+
+While most people use the ES6 class syntax to create components or the
+`React.createClass` function, React v0.14 introduced a new style syntax for
+components which don't handle state. These are know as stateless functional
+components and allow developers to write compact components as functions. There
+are a few ways to compose them:
+
+**One-Liners**
+
+```
+const ListItem = (props) => <li className="list-item">{props.item}</li>;
+```
+
+**Multi-liners**
+
+```
+const List = ({items}) => (
+  <ul className="list">
+    {items.map(item => <ListItem key={item} item={item} />)}
+  </ul>
+);
+```
+
+**Multi-line with logic**
+
+```
+const Body = (props) => {
+  let items = doSomething(props.rawItems);
+  return (
+    <div>
+      <h1>{props.header}</h1>
+      <List items={items} />
+    </div>
+  );
+};
+```
+
+One thing to remember with these components is that they do not have state or
+lifecycle functions.
 
 ## Working with Refs
 
